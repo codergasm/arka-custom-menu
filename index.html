@@ -7,78 +7,411 @@
 </head>
 <body>
 <div class="container">
-<button class="btn">
+<button class="btn btn--menu">
     Najedź na mnie
 </button>
+<!-- DESKTOP -->
 <div class="dropdownMenu">
-    <div class="dropdownMenu__inner">
-        <a class="dropdownMenu__inner__item" onmouseover="showAnimation(0)" onmouseleave="hideAnimation()">
-            Fajerwerki
+    <div class="dropdownMenu__inner" onmouseleave="hideAnimation()">
+        <a class="dropdownMenu__inner__item" onmouseover="showAnimation(0)">
+            !WYPRZEDAŻ!
         </a>
-        <a class="dropdownMenu__inner__item" onmouseover="showAnimation(1)" onmouseleave="hideAnimation()">
-            Fajerwerki
+        <a class="dropdownMenu__inner__item" onmouseover="showAnimation(1)">
+            Ciche fajerwerki (Silenty)
         </a>
-        <a class="dropdownMenu__inner__item" onmouseover="showAnimation(2)" onmouseleave="hideAnimation()">
-            Fajerwerki
+        <a class="dropdownMenu__inner__item" onmouseover="showAnimation(2)">
+            Emitery dźwięku
         </a>
-        <a class="dropdownMenu__inner__item" onmouseover="showAnimation(0)" onmouseleave="hideAnimation()">
-            Fajerwerki
-        </a>
-        <a class="dropdownMenu__inner__item">
-            Fajerwerki
+        <a class="dropdownMenu__inner__item" onmouseover="showAnimation(0)">
+            Flary / Race / Pochodnie
         </a>
         <a class="dropdownMenu__inner__item">
-            Fajerwerki
+            Fontanny tortowe
         </a>
         <a class="dropdownMenu__inner__item">
-            Fajerwerki
+            Karabinki petard
         </a>
         <a class="dropdownMenu__inner__item">
-            Fajerwerki
+            Konfetti / Serpentyny
         </a>
         <a class="dropdownMenu__inner__item">
-            Fajerwerki
+            Odstraszacze zwierząt
         </a>
         <a class="dropdownMenu__inner__item">
-            Fajerwerki
+            Petardy
         </a>
         <a class="dropdownMenu__inner__item">
-            Fajerwerki
+            Pirotechnika drobna
         </a>
         <a class="dropdownMenu__inner__item">
-            Fajerwerki
+            Proszki holi
         </a>
         <a class="dropdownMenu__inner__item">
-            Fajerwerki
+            Race pistoletowe
         </a>
         <a class="dropdownMenu__inner__item">
-            Fajerwerki
+            Rakiety
         </a>
         <a class="dropdownMenu__inner__item">
-            Fajerwerki
+            Rzymskie ognie
         </a>
         <a class="dropdownMenu__inner__item">
-            Fajerwerki
+            Strefa kibiców
         </a>
         <a class="dropdownMenu__inner__item">
-            Fajerwerki
+            Stroboskopy
         </a>
         <a class="dropdownMenu__inner__item">
-            Fajerwerki
+            Świece dymne
         </a>
         <a class="dropdownMenu__inner__item">
-            Fajerwerki
+            Granaty dymne
         </a>
         <a class="dropdownMenu__inner__item">
-            Fajerwerki
+            Wulkany / Fontanny
+        </a>
+        <a class="dropdownMenu__inner__item">
+            Moździeże / Single shoty
+        </a>
+        <a class="dropdownMenu__inner__item">
+            Wyrzutnie / Baterie
+        </a>
+        <a class="dropdownMenu__inner__item">
+            Zimne ognie
+        </a>
+        <a class="dropdownMenu__inner__item">
+            Zestawy
         </a>
     </div>
     <div class="dropdownMenu__lottie">
         <!-- PLACE FOR LOTTIE ANIMATIONS ELEMENTS -->
-        <img class="lottieImagePlaceholder" src="https://www.arkafajerwerki.pl/data/gfx/mask/pol/logo_1_big.png" alt="arka-fajerwerki" />
+        <img class="lottieImagePlaceholder"
+             src="https://www.arkafajerwerki.pl/data/gfx/mask/pol/logo_1_big.png"
+             alt="arka-fajerwerki" />
+
+        <img class="lottieLoader" src="./assets/loader.gif" alt="loader" />
+    </div>
+</div>
+
+<!-- MOBILE -->
+    <button class="btn btn--menuMobile" onclick="openMobileMenu()">
+        <img class="img" src="http://wojciechpilat.pl/wp-content/themes/wojciechpilat/img/menu.svg" alt="menu" />
+    </button>
+<div class="mobileMenu">
+    <!-- Main categories -->
+    <div class="mobileMenu__slide mobileMenu__slide--1">
+        <div class="mobileMenu__slide__topMenu">
+            <button class="mobileMenu__item"
+                    onclick="goToMobileMenuSlide(1)">
+                Fajerwerki
+                <img class="mobileMenu__item__icon" src="./assets/arrow.svg" alt="arrow" />
+            </button>
+            <button class="mobileMenu__item"
+                    onclick="goToMobileMenuSlide(2)">
+                Pirotechnika profesjonalna
+                <img class="mobileMenu__item__icon" src="./assets/arrow.svg" alt="arrow" />
+            </button>
+            <a class="mobileMenu__item" href="#">
+                Nowości
+            </a>
+            <a class="mobileMenu__item" href="#">
+                Hurtownia
+            </a>
+            <a class="mobileMenu__item" href="#">
+                Blog
+            </a>
+            <a class="mobileMenu__item" href="#">
+                Kontakt
+            </a>
+        </div>
+
+        <div class="mobileMenu__slide__bottomMenu">
+            <a class="mobileMenu__item" href="#">
+                O nas
+            </a>
+            <a class="mobileMenu__item" href="#">
+                Informacje o wysyłce
+            </a>
+            <a class="mobileMenu__item" href="#">
+                Zwroty
+            </a>
+            <a class="mobileMenu__item" href="#">
+                Płatność i podatki
+            </a>
+            <a class="mobileMenu__item" href="#">
+                Zasady i warunki
+            </a>
+        </div>
+
+        <div class="mobileMenu__banner">
+            <img class="img"
+                 src="https://www.arkafajerwerki.pl/data/gfx/mask/pol/logo_1_big.png"
+                 alt="arka-fajerwerki" />
+        </div>
+    </div>
+
+    <!-- Subcategories 1 -->
+    <div class="mobileMenu__slide mobileMenu__slide--2">
+        <button class="mobileMenu__subcategoriesHeader" onclick="goToMobileMenuSlide(0)">
+            <img class="mobileMenu__item__icon" src="./assets/arrow.svg" alt="arrow" />
+            Fajerwerki
+        </button>
+        <div class="mobileMenu__subcategories">
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(0, 0)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Emitery dźwięku
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(0, 1)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Emitery dźwięku
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(0, 2)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Emitery dźwięku
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(0, 3)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Emitery dźwięku
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(0, 4)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Emitery dźwięku
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(0, 5)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Emitery dźwięku
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(0, 6)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Emitery dźwięku
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(0, 7)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Emitery dźwięku
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(0, 8)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Emitery dźwięku
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(0, 9)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Emitery dźwięku
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(0, 10)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Emitery dźwięku
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(0, 11)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Emitery dźwięku
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subcategories 2 -->
+    <div class="mobileMenu__slide mobileMenu__slide--3">
+        <button class="mobileMenu__subcategoriesHeader" onclick="goToMobileMenuSlide(0)">
+            <img class="mobileMenu__item__icon" src="./assets/arrow.svg" alt="arrow" />
+            Pirotechnika profesjonalna
+        </button>
+        <div class="mobileMenu__subcategories">
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(1, 0)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Wulkany
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(1, 1)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Wulkany
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(1, 2)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Wulkany
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(1, 3)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Emitery dźwięku
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(1, 4)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Emitery dźwięku
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(1, 5)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Emitery dźwięku
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(1, 6)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Emitery dźwięku
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(1, 7)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Emitery dźwięku
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(1, 8)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Emitery dźwięku
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(1, 9)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Emitery dźwięku
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(1, 10)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Emitery dźwięku
+                </a>
+            </div>
+            <div class="mobileMenu__subcategories__item">
+                <button class="mobileMenu__subcategories__item__animation"
+                        onclick="showSubcategoriesAnimation(1, 11)">
+                    <img class="img" src="" alt="animacja" />
+                </button>
+                <a class="mobileMenu__subcategories__item__link"
+                   href="#">
+                    Emitery dźwięku
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 <script src="./main.js"></script>
 </body>
