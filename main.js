@@ -1,21 +1,57 @@
-const menu = document.querySelector('.dropdownMenu');
 const lottieWrapper = document.querySelector('.dropdownMenu__lottie');
 const lottieImagePlaceholder = document.querySelector('.lottieImagePlaceholder');
 const lottieLoader = document.querySelector('.lottieLoader');
+
+const placeholderDuration = 2;
 
 let placeholderElement, videoElement;
 let currentZIndex = 1000;
 let canShowLoader = -1;
 let canShowLoaderMenu = -1;
 let canShowLoaderElement = -1;
+let canLoadVideo = Array.from(Array(10000).keys()).map(() => (false));
 
 const videos = [
-    'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-    'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-    'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json'
+    'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+    'https://ftp.codergasm.com/arka-custom-menu/assets/film1.mp4',
+    'https://ftp.codergasm.com/arka-custom-menu/assets/film2.mp4',
+    'https://ftp.codergasm.com/arka-custom-menu/assets/film3.mp4',
+    'https://ftp.codergasm.com/arka-custom-menu/assets/film4.mp4',
+    'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+    'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+    'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+    'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+    'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+    'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+    'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+    'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+    'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+    'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+    'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+    'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+    'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+    'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+    'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4'
 ];
 
 const placeholders = [
+    'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
+    'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
+    'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
+    'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
+    'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
+    'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
+    'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
+    'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
+    'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
+    'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
+    'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
+    'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
+    'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
+    'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
+    'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
+    'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
+    'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
     'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
     'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
     'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json'
@@ -26,6 +62,11 @@ const placeholders = [
 const showAnimation = (n) => {
     placeholderElement = null;
     videoElement = null;
+    canLoadVideo[n] = false;
+
+    Array.from(document.querySelectorAll('.lottie')).forEach((item) => {
+       item.remove();
+    });
 
     canShowLoader = n;
 
@@ -36,7 +77,7 @@ const showAnimation = (n) => {
         placeholderElement = document.createElement('lottie-player');
 
         placeholderElement.setAttribute('class', `lottie lottie--placeholder lottie--placeholder--${n}`);
-        placeholderElement.setAttribute('onload', `loadPlaceholder()`);
+        placeholderElement.setAttribute('onload', `loadPlaceholder(${n})`);
         placeholderElement.setAttribute('src', placeholders[n]);
 
         placeholderElement.addEventListener('complete', (el) => {
@@ -58,10 +99,10 @@ const showAnimation = (n) => {
     }
 
     if(!videoElement) {
-        videoElement = document.createElement('lottie-player');
+        videoElement = document.createElement('video');
 
         videoElement.setAttribute('class', `lottie lottie--video lottie--video--${n}`);
-        videoElement.setAttribute('onload', `loadVideo()`);
+        videoElement.setAttribute('onloadeddata', `setCanLoadVideo(${n})`);
         videoElement.setAttribute('src', videos[n]);
         videoElement.setAttribute('loop', 'true');
 
@@ -71,8 +112,12 @@ const showAnimation = (n) => {
     }
     else {
         currentZIndex++;
-        showElement(videoElement, currentZIndex);
+        showElement(videoElement, currentZIndex, true);
     }
+}
+
+const setCanLoadVideo = (n) => {
+    canLoadVideo[n] = true;
 }
 
 const hideAnimation = () => {
@@ -85,7 +130,7 @@ const hideAnimation = () => {
     showElement(lottieImagePlaceholder, currentZIndex);
 
     Array.from(document.querySelectorAll('.lottie')).forEach((item) => {
-        hideElement(item);
+        hideElement(item, Array.from(item.classList).includes('lottie--video'));
     });
 }
 
@@ -93,44 +138,70 @@ const addStandardAttributesToLottieElements = (el) => {
     el.setAttribute('background', '#fff');
     el.setAttribute('speed', '1');
     el.setAttribute('autoplay', 'true');
+    el.muted = true;
 }
 
-const hideElement = (el) => {
+const hideElement = (el, stopVideo = false) => {
     el.style.opacity = '0';
 
     setTimeout(() => {
         el.style.visibility = 'hidden';
         el.style.zIndex = '-100';
     }, 200);
+
+    if(stopVideo) {
+        el.pause();
+    }
 }
 
-const showElement = (el, index = 100) => {
+const showElement = (el, index = 100, startVideo) => {
     el.style.opacity = '1';
     el.style.visibility = 'visible';
     el.style.zIndex = index.toString();
+
+    if(startVideo) {
+        try {
+            el.play();
+        }
+        catch(e) {
+            throw new Error('Error');
+        }
+    }
 }
 
-const loadPlaceholder = () => {
+const loadPlaceholder = (n) => {
     currentZIndex++;
+
+    if(currentClickedSubmenu >= 0 && currentClickedSubmenuItem >= 0) {
+        subcategoriesItemsImages[currentClickedSubmenu][currentClickedSubmenuItem].style.opacity = '0';
+    }
 
     hideElement(lottieImagePlaceholder);
     showElement(placeholderElement, currentZIndex);
+
+    setTimeout(() => {
+        loadVideo(n);
+    }, placeholderDuration * 1000);
 }
 
-const loadVideo = () => {
-    currentZIndex++;
-    canShowLoader = -1;
+const loadVideo = (n) => {
+    if(canLoadVideo[n]) {
+        videoElement.currentTime = 0;
 
-    hideElement(placeholderElement);
-    hideElement(lottieLoader);
-    showElement(videoElement, currentZIndex);
+        currentZIndex++;
+        canShowLoader = -1;
+
+        showElement(videoElement, currentZIndex, true);
+        hideElement(placeholderElement);
+        hideElement(lottieLoader);
+
+        canLoadVideo[n] = false;
+    }
 }
 
 const loadVideoMobile = () => {
     canShowLoaderMenu = -1;
     canShowLoaderElement = -1;
-
-    loadVideo();
 }
 
 // Mobile
@@ -229,32 +300,48 @@ const mobilePlaceholders = [
 
 const mobileVideos = [
     [
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json'
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film1.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film2.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film3.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film4.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4'
     ],
     [
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json',
-        'https://lottie.host/2bd3f81c-2b1c-4d94-b032-05a56632a8c3/PiQW30QYP0.json'
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film1.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film2.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film3.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film4.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4',
+        'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4'
     ]
 ];
 
@@ -311,33 +398,35 @@ const showSubcategoriesAnimation = (menu, element) => {
         window.location.href = subcategoriesItemsLinks[menu][element];
     }
     else {
-        removeFirstClickFromAllSubmenuElements();
+        removeFirstClickFromAllSubmenuElements(menu, element);
 
-        currentClickedSubmenu = menu;
-        currentClickedSubmenuItem = element;
+        setTimeout(() => {
+            currentClickedSubmenu = menu;
+            currentClickedSubmenuItem = element;
 
-        subcategoriesItems.forEach((item, index) => {
-            if(index === menu) {
-                item.forEach((item, index) => {
-                    if(index === element) {
-                        item.style.border = '1px dashed #dedede';
-                    }
-                    else {
+            subcategoriesItems.forEach((item, index) => {
+                if(index === menu) {
+                    item.forEach((item, index) => {
+                        if(index === element) {
+                            item.style.border = '1px dashed #dedede';
+                        }
+                        else {
+                            item.style.border = '1px solid transparent';
+                        }
+                    });
+                }
+                else {
+                    item.forEach((item) => {
                         item.style.border = 'none';
-                    }
-                });
-            }
-            else {
-                item.forEach((item) => {
-                    item.style.border = 'none';
-                });
-            }
-        });
+                    });
+                }
+            });
 
-        subcategoriesItemsNames[menu][element] = subcategoriesItemsNamesElements[menu][element].textContent;
-        subcategoriesItemsNamesElements[menu][element].textContent = 'Wejdź';
+            subcategoriesItemsNames[menu][element] = subcategoriesItemsNamesElements[menu][element].textContent;
+            subcategoriesItemsNamesElements[menu][element].textContent = 'Wejdź';
 
-        showMobileAnimation(menu, element);
+            showMobileAnimation(menu, element);
+        }, 200);
     }
 }
 
@@ -355,7 +444,7 @@ const showMobileAnimation = (menu, element) => {
         placeholderElement = document.createElement('lottie-player');
 
         placeholderElement.setAttribute('class', `lottie lottie--placeholder lottie--placeholder--${menu}--${element}`);
-        placeholderElement.setAttribute('onload', `loadPlaceholder()`);
+        placeholderElement.setAttribute('onload', `loadPlaceholder(${100 * (menu+1) + element})`);
         placeholderElement.setAttribute('src', mobilePlaceholders[menu][element]);
 
         placeholderElement.addEventListener('complete', (el) => {
@@ -377,12 +466,13 @@ const showMobileAnimation = (menu, element) => {
     }
 
     if(!videoElement) {
-        videoElement = document.createElement('lottie-player');
+        videoElement = document.createElement('video');
 
         videoElement.setAttribute('class', `lottie lottie--video lottie--video--${menu}--${element}`);
-        videoElement.setAttribute('onload', `loadVideoMobile()`);
+        videoElement.setAttribute('onloadeddata', `setCanLoadVideo(${100 * (menu+1) + element})`);
         videoElement.setAttribute('src', mobileVideos[menu][element]);
         videoElement.setAttribute('loop', 'true');
+        videoElement.setAttribute('playsinline', 'true');
 
         addStandardAttributesToLottieElements(videoElement);
 
@@ -390,13 +480,21 @@ const showMobileAnimation = (menu, element) => {
     }
     else {
         currentZIndex++;
-        showElement(videoElement, currentZIndex);
+        showElement(videoElement, currentZIndex, true);
     }
 }
 
 const removeFirstClickFromAllSubmenuElements = () => {
+    hideAnimation();
+
     currentClickedSubmenu = -1;
     currentClickedSubmenuItem = -1;
+
+    subcategoriesItemsImages.forEach((item) => {
+        item.forEach((item) => {
+            item.style.opacity = '1';
+        });
+    });
 
     subcategoriesItemsNamesElements.forEach((item, menuIndex) => {
         item.forEach((item, elementIndex) => {
@@ -406,8 +504,6 @@ const removeFirstClickFromAllSubmenuElements = () => {
             }
         });
     });
-
-    hideAnimation();
 }
 
 // Detect click outside subcategories menu item
