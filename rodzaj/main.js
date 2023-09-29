@@ -2,7 +2,6 @@ const lottieWrapper = document.querySelector('.dropdownMenu__lottie');
 const lottieImagePlaceholder = document.querySelector('.lottieImagePlaceholder');
 const lottieLoader = document.querySelector('.lottieLoader');
 
-const placeholderDuration = 2;
 let timeoutId = Array.from(Array(1000).keys()).map(() => null);
 let hideTimeout;
 
@@ -47,19 +46,8 @@ const videos = [
     'https://ftp.codergasm.com/arka-custom-menu/assets/film.mp4'
 ];
 
-const videosRawBlobs = JSON.parse(localStorage.getItem('videosRawBlobs')) || videos.map(() => null);
-const videosBlobs = videosRawBlobs.map((item) => {
-    return null;
-
-    // if(item) {
-    //     const blob = new Blob([atob(item)], { type: 'text/plain' });
-    //     const URL = this.window.URL || this.window.webkitURL;
-    //     return URL.createObjectURL(blob);
-    // }
-    // else {
-    //     return null;
-    // }
-});
+const videosRawBlobs = videos.map(() => null);
+const videosBlobs = videosRawBlobs.map(() => null);
 const videosBlobsAvailable = videosBlobs.map((item) => (!!item));
 
 const placeholders = [
@@ -97,23 +85,13 @@ const placeholders = [
 
 // Desktop
 
-function blobToBase64(blob, callback) {
-    var reader = new FileReader();
-    reader.onload = function() {
-        var dataUrl = reader.result;
-        var base64 = dataUrl.split(',')[1];
-        callback(base64);
-    };
-    reader.readAsDataURL(blob);
-}
-
 const showAnimation = async (n) => {
     clearTimeout(hideTimeout);
 
     hideElement(lottieImagePlaceholder);
+    showElement(lottieLoader);
 
     timeoutId[n] = setTimeout(() => {
-        placeholderElement = null;
         videoElement = null;
 
         videosBlobsAvailable[n] = videosBlobs[n];
@@ -125,33 +103,7 @@ const showAnimation = async (n) => {
 
         canShowLoader = n;
 
-        placeholderElement = document.querySelector(`.lottie--placeholder--${n}`);
         videoElement = document.querySelector(`.lottie--video--${n}`);
-
-        if(!placeholderElement && !videosBlobs[n]) {
-            placeholderElement = document.createElement('lottie-player');
-
-            placeholderElement.setAttribute('class', `lottie lottie--placeholder lottie--placeholder--${n}`);
-            placeholderElement.setAttribute('onload', `loadPlaceholder(${n})`);
-            placeholderElement.setAttribute('src', placeholders[n]);
-
-            placeholderElement.addEventListener('complete', (el) => {
-                hideElement(el.target);
-
-                if(canShowLoader === n) {
-                    currentZIndex++;
-                    showElement(lottieLoader, currentZIndex);
-                }
-            });
-
-            addStandardAttributesToLottieElements(placeholderElement);
-
-            lottieWrapper.appendChild(placeholderElement);
-        }
-        else if(!videosBlobs[n]) {
-            currentZIndex++;
-            showElement(placeholderElement, currentZIndex);
-        }
 
         if(!videoElement) {
             videoElement = document.createElement('video');
@@ -162,15 +114,6 @@ const showAnimation = async (n) => {
                         const URL = this.window.URL || this.window.webkitURL;
                         const blob = await r.blob();
 
-                        // blobToBase64(blob, function(base64) {
-                        //     localStorage.setItem('videosRawBlobs', JSON.stringify(videosRawBlobs.map((item, index) => {
-                        //         if(index === n) return base64;
-                        //         else return item;
-                        //     })));
-                        //     console.log('Blob został zapisany w LocalStorage.');
-                        // });
-
-                        // videosRawBlobs[n] = blob;
                         videosBlobs[n] = URL.createObjectURL(blob);
                     });
 
@@ -181,7 +124,7 @@ const showAnimation = async (n) => {
             }
 
             videoElement.setAttribute('class', `lottie lottie--video lottie--video--${n}`);
-            videoElement.setAttribute('onloadeddata', `setCanLoadVideo(${n})`);
+            videoElement.setAttribute('onloadeddata', `loadVideo()`);
             videoElement.setAttribute('loop', 'true');
 
             addStandardAttributesToLottieElements(videoElement);
@@ -192,15 +135,7 @@ const showAnimation = async (n) => {
             currentZIndex++;
             showElement(videoElement, currentZIndex, true);
         }
-
-        if(videosBlobsAvailable[n]) {
-            loadVideo(n);
-        }
-    }, 1);
-}
-
-const setCanLoadVideo = (n) => {
-    canLoadVideo[n] = true;
+    }, 100);
 }
 
 const hideAnimation = (n) => {
@@ -213,21 +148,19 @@ const hideAnimation = (n) => {
         });
     }
 
-    hideTimeout = setTimeout(() => {
-        currentZIndex++;
-        canShowLoader = -1;
-        canShowLoaderMenu = -1;
-        canShowLoaderElement = -1;
-        canLoadVideo[n] = false;
-        videoHidden[n] = true;
+    currentZIndex++;
+    canShowLoader = -1;
+    canShowLoaderMenu = -1;
+    canShowLoaderElement = -1;
+    canLoadVideo[n] = false;
+    // videoHidden[n] = true;
 
-        hideElement(lottieLoader);
-        showElement(lottieImagePlaceholder, currentZIndex);
+    hideElement(lottieLoader);
+    showElement(lottieImagePlaceholder, currentZIndex);
 
-        Array.from(document.querySelectorAll('.lottie')).forEach((item) => {
-            hideElement(item, Array.from(item.classList).includes('lottie--video'));
-        });
-    }, 250);
+    Array.from(document.querySelectorAll('.lottie')).forEach((item) => {
+        hideElement(item, Array.from(item.classList).includes('lottie--video'));
+    });
 }
 
 const addStandardAttributesToLottieElements = (el) => {
@@ -252,7 +185,7 @@ const hideElement = (el, stopVideo = false) => {
     }
 }
 
-const showElement = (el, index = 100, startVideo) => {
+const showElement = (el, index = 100, startVideo = false) => {
     el.style.opacity = '1';
     el.style.visibility = 'visible';
     el.style.zIndex = index.toString();
@@ -267,59 +200,15 @@ const showElement = (el, index = 100, startVideo) => {
     }
 }
 
-const loadPlaceholder = (n) => {
+const loadVideo = () => {
+    videoElement.currentTime = 0;
+
     currentZIndex++;
+    canShowLoader = -1;
 
-    if(currentClickedSubmenu >= 0 && currentClickedSubmenuItem >= 0) {
-        subcategoriesItemsImages[currentClickedSubmenu][currentClickedSubmenuItem].style.opacity = '0';
-    }
-
-    hideElement(lottieImagePlaceholder);
-    showElement(placeholderElement, currentZIndex);
-
-    waitForVariableToBeTrue(n)
-        .then(() => {
-            if(videosBlobsAvailable[n]) {
-                loadVideo(n);
-            }
-            else {
-                setTimeout(() => {
-                    loadVideo(n);
-                }, placeholderDuration * 1);
-            }
-        });
-}
-
-function waitForVariableToBeTrue(n) {
-    return new Promise((resolve) => {
-        const checkX = () => {
-            if(canLoadVideo[n] === true) {
-                resolve();
-            } else {
-                setTimeout(checkX, 100); // Sprawdzamy co 100 ms
-            }
-        };
-
-        checkX(); // Rozpocznij sprawdzanie od razu
-    });
-}
-
-const loadVideo = (n) => {
-    if(!videoHidden[n]) {
-        videoElement.currentTime = 0;
-
-        currentZIndex++;
-        canShowLoader = -1;
-
-        showElement(videoElement, currentZIndex, true);
-        hideElement(placeholderElement);
-        hideElement(lottieLoader);
-    }
-}
-
-const loadVideoMobile = () => {
-    canShowLoaderMenu = -1;
-    canShowLoaderElement = -1;
+    showElement(videoElement, currentZIndex, true);
+    hideElement(placeholderElement);
+    hideElement(lottieLoader);
 }
 
 // Mobile
@@ -349,6 +238,12 @@ const subcategoriesItemsLinks = Array.from(Array(numberOfCategories).keys()).map
 });
 const subcategoriesItemsButtons = Array.from(Array(numberOfCategories).keys()).map((item) => {
     return Array.from(document.querySelectorAll(`.mobileMenu__slide--${item+2} .mobileMenu__subcategories__item__animation`));
+});
+const mobileLoaders = Array.from(Array(numberOfCategories).keys()).map((item) => {
+   return Array.from(document.querySelectorAll(`.mobileMenu__slide--${item+2} .mobileLoader`));
+});
+const mobileImagesElements = Array.from(Array(numberOfCategories).keys()).map((item) => {
+    return Array.from(document.querySelectorAll(`.mobileMenu__slide--${item+2} .mobileMenu__subcategories__item__animation .img`));
 });
 
 let currentClickedSubmenu = -1;
@@ -382,37 +277,6 @@ const mobileImages = [
         'https://img.ltwebstatic.com/images3_abc/2023/09/15/0b/1694779171e27516175a4cf682de0a48b3c5dc8052.webp',
         'https://img.ltwebstatic.com/images3_abc/2023/09/15/0b/1694779171e27516175a4cf682de0a48b3c5dc8052.webp',
         'https://img.ltwebstatic.com/images3_abc/2023/09/15/0b/1694779171e27516175a4cf682de0a48b3c5dc8052.webp'
-    ]
-];
-
-const mobilePlaceholders = [
-    [
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json'
-    ],
-    [
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json',
-        'https://lottie.host/79930045-44eb-46cd-b3db-7609540b55df/K6LJT7P8Qo.json'
     ]
 ];
 
@@ -516,12 +380,15 @@ const showSubcategoriesAnimation = (menu, element) => {
         window.location.href = subcategoriesItemsLinks[menu][element];
     }
     else {
-        removeFirstClickFromAllSubmenuElements(menu, element);
+        hideElement(mobileImagesElements[menu][element]);
+        showElement(mobileLoaders[menu][element]);
+
+        currentClickedSubmenu = menu;
+        currentClickedSubmenuItem = element;
+
+        removeFirstClickFromAllSubmenuElements(false);
 
         setTimeout(() => {
-            currentClickedSubmenu = menu;
-            currentClickedSubmenuItem = element;
-
             subcategoriesItems.forEach((item, index) => {
                 if(index === menu) {
                     item.forEach((item, index) => {
@@ -544,50 +411,23 @@ const showSubcategoriesAnimation = (menu, element) => {
             subcategoriesItemsNamesElements[menu][element].textContent = 'Wejdź';
 
             showMobileAnimation(menu, element);
-        }, 200);
+        }, 50);
     }
 }
 
 const showMobileAnimation = (menu, element) => {
-    placeholderElement = null;
     videoElement = null;
 
     canShowLoaderMenu = menu;
     canShowLoaderElement = element;
 
-    placeholderElement = document.querySelector(`.lottie--placeholder--${menu}--${element}`);
     videoElement = document.querySelector(`.lottie--video--${menu}--${element}`);
-
-    if(!placeholderElement) {
-        placeholderElement = document.createElement('lottie-player');
-
-        placeholderElement.setAttribute('class', `lottie lottie--placeholder lottie--placeholder--${menu}--${element}`);
-        placeholderElement.setAttribute('onload', `loadPlaceholder(${100 * (menu+1) + element})`);
-        placeholderElement.setAttribute('src', mobilePlaceholders[menu][element]);
-
-        placeholderElement.addEventListener('complete', (el) => {
-            hideElement(el.target);
-
-            if(canShowLoaderMenu === menu && canShowLoaderElement === element) {
-                currentZIndex++;
-                showElement(lottieLoader, currentZIndex);
-            }
-        });
-
-        addStandardAttributesToLottieElements(placeholderElement);
-
-        subcategoriesItemsButtons[menu][element].appendChild(placeholderElement);
-    }
-    else {
-        currentZIndex++;
-        showElement(placeholderElement, currentZIndex);
-    }
 
     if(!videoElement) {
         videoElement = document.createElement('video');
 
         videoElement.setAttribute('class', `lottie lottie--video lottie--video--${menu}--${element}`);
-        videoElement.setAttribute('onloadeddata', `setCanLoadVideo(${100 * (menu+1) + element})`);
+        videoElement.setAttribute('onloadeddata', `loadVideo()`);
         videoElement.setAttribute('src', mobileVideos[menu][element]);
         videoElement.setAttribute('loop', 'true');
         videoElement.setAttribute('playsinline', 'true');
@@ -598,15 +438,34 @@ const showMobileAnimation = (menu, element) => {
     }
     else {
         currentZIndex++;
-        showElement(videoElement, currentZIndex, true);
+        setTimeout(() => {
+            showElement(videoElement, currentZIndex, true);
+        }, 200);
     }
 }
 
-const removeFirstClickFromAllSubmenuElements = () => {
+const removeFirstClickFromAllSubmenuElements = (reset = true) => {
     hideAnimation(-1);
 
-    currentClickedSubmenu = -1;
-    currentClickedSubmenuItem = -1;
+    mobileLoaders.forEach((item, menuIndex) => {
+        item.forEach((item, elementIndex) => {
+            if(menuIndex !== currentClickedSubmenu || elementIndex !== currentClickedSubmenuItem) {
+                hideElement(item);
+            }
+        });
+    });
+    mobileImagesElements.forEach((item, menuIndex) => {
+        item.forEach((item, elementIndex) => {
+            if(menuIndex !== currentClickedSubmenu || elementIndex !== currentClickedSubmenuItem) {
+                showElement(item);
+            }
+        });
+    });
+
+    if(reset) {
+        currentClickedSubmenu = -1;
+        currentClickedSubmenuItem = -1;
+    }
 
     subcategoriesItemsImages.forEach((item) => {
         item.forEach((item) => {
@@ -630,7 +489,10 @@ $(document).click(function(event) {
     if(!$target.closest('.mobileMenu__subcategories__item').length &&
         $('.mobileMenu__subcategories__item').is(":visible")) {
 
-        removeFirstClickFromAllSubmenuElements();
+        currentClickedSubmenu = -1;
+        currentClickedSubmenuItem = -1;
+
+        removeFirstClickFromAllSubmenuElements(true);
     }
 });
 
