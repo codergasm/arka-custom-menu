@@ -19,9 +19,11 @@
     opacity: 0;
 }
 
+.btn--menu--sound:hover ~ .dropdownMenu--sound,
 .dropdownMenu--types:hover,
 .btn--menu--types:hover ~ .dropdownMenu--types,
 .dropdownMenu--events:hover,
+.dropdownMenu--sound:hover,
 .btn--menu--events:hover ~ .dropdownMenu--events {
     visibility: visible;
     opacity: 1;
@@ -677,5 +679,188 @@
 
     .btn--prev .img {
         transform: rotateY(180deg);
+    }
+}
+
+/* Glosnosc */
+.dropdownMenuSound__left {
+    width: 40%;
+}
+
+.dropdownMenuSound__right {
+    width: 48%;
+}
+
+.lottieSoundAnimation {
+    width: 100%;
+    height: auto;
+    transform: translate(8%, -20%);
+}
+
+.dropdownMenuSound__slider {
+    transform: translateY(-150px);
+}
+
+.dropdownMenuSound__slider__range {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 25px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.dropdownMenu--sound {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    overflow-x: hidden;
+}
+
+/* Kolor wypełnienia slidera */
+.dropdownMenuSound__slider__range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: transparent;
+    border: 3px solid #8266d2;
+    cursor: pointer;
+}
+
+.dropdownMenuSound__slider__range::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #4CAF50;
+    cursor: pointer;
+}
+
+.dropdownMenuSound__right__header,
+.dropdownMenuSound__right__text {
+    transition: .4s all;
+}
+
+.dropdownMenuSound__right__header {
+    font-weight: 700;
+    font-size: 24px;
+    margin-bottom: 25px;
+}
+
+.dropdownMenuSound__right__text {
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.dropdownMenuSound__slider__bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 25px;
+}
+
+.dropdownMenuSound__slider__bottom .btn--prev {
+    transform: rotateY(180deg);
+}
+
+.dropdownMenuSound__slider__bottom .btn--prev,
+.dropdownMenuSound__slider__bottom .btn--next {
+    width: 25px;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+/* Loaded button animation */
+.btnOuter {
+    margin: 0 20px;
+}
+
+.btn--dropdownMenuSound {
+    border: 1px solid black;
+    border-radius: 3px;
+    width: 100px;
+    height: 30px;
+    display: block;
+    background: linear-gradient(to right, black 50%, white 50%);
+    background-size: 200% 100%;
+    background-position: right bottom;
+    cursor: pointer;
+    transition: all 2s ease-out;
+}
+
+.btn--dropdownMenuSound:hover {
+    background-position: left bottom;
+}
+
+.btn--dropdownMenuSound .text {
+    text-align: center;
+    font-size: 16px;
+    line-height: 30px;
+    color: black;
+    transition: all 1.5s ease-out;
+    display: block;
+}
+
+.btn--dropdownMenuSound .text:hover {
+    color: white;
+}
+
+@media(max-width: 980px) {
+    .dropdownMenuSound__left {
+        width: 100%;
+    }
+
+    .dropdownMenuSound__right {
+        display: none;
+    }
+
+    .mobileMenu__subcategories--sound {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .dropdownMenuSound__right__header--mobile,
+    .dropdownMenuSound__right__text--mobile {
+        text-align: center;
+    }
+
+    .dropdownMenuSound__right__header--mobile {
+        font-size: 17px;
+        margin: 0;
+    }
+
+    .dropdownMenuSound__right__text--mobile {
+        font-size: 13px;
+        margin-top: 15px;
+    }
+
+    .dropdownMenuSound__slider__bottom .btn--prev--sound {
+        transform: rotateY(0);
+    }
+
+    .btn--dropdownMenuSound .text {
+        font-size: 12px;
+    }
+
+    .dropdownMenuSound__slider__range--mobile {
+        margin-top: 15px;
+    }
+
+    .dropdownMenuSound__slider__bottom {
+        margin-top: 0;
+    }
+
+    .mobileMenu__slide.mobileMenu__slide--3 {
+        overflow: hidden;
+    }
+
+    .mobileMenu__slide--4 .mobileMenu__subcategoriesHeader,
+    .mobileMenu__subcategories--sound,
+    .mobileMenu__subcategories--sound * {
+        touch-action: none !important;
     }
 }

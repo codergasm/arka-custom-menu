@@ -536,6 +536,10 @@ const goToMobileMenuSlide = (n) => {
         slideIn(mobileMenuSlides[n]);
     }, 300);
 
+    if(n === 3) {
+        checkFirstSoundMenuAnimationMobile();
+    }
+
     // if(n === 2) {
     //     setTimeout(() => {
     //         const videos = Array.from(document.querySelectorAll(`.mobileMenu__subcategories__carousel__item--${eventsMobileCarouselPosition} video`));
@@ -719,6 +723,401 @@ const carouselPrev = () => {
 }
 
 const carouselNext = () => {
-    console.log('next');
     mobileSlickCarousel.slick('slickNext');
+}
+
+/* Glosnosc */
+const framesRanges = [
+    [0, 140],
+    [141, 270],
+    [271, 400],
+    [401, 530],
+    [531, 670],
+    [671, 800],
+    [801, 920],
+    [921, 33214], // TODO: dokonczenie animacji
+    [35321, 33128],
+    [33219, 43213],
+    [432134, 43217],
+    [43213218, 103210]
+];
+const soundLevelsTitles = [
+    'Bezdźwięczne',
+    'Niemalże bezdźwięczne',
+    'Niczym szelest liści',
+    'Niczym szept',
+    'Bardzo ciche',
+    'Ciche',
+    'Niczym szum suszarki',
+    'Pękające i trzaskające fajerwerki',
+    'Słabiej hukające fajerwerki',
+    'Średnio hukające fajerwerki',
+    'Mocno hukające fajerwerki',
+    'Pizgające na maksa',
+];
+const soundLevelsDescriptions = [
+    'Palący się papier',
+    'Spalające się zimny ogień',
+    'Spalający się nieco mocniejszy produkt',
+    'Głośniejsze wulkany i fontanny',
+    'Motylki z efektem typu rozprysk na niebie',
+    'Ciche wyrzutnie z efektem opadającym',
+    'Wyrzutnie z efektem opadającym',
+    'Wyrzutnie z efektem krosety',
+    'Wyrzutnie z klasycznymi efektami',
+    'Wyrzutnie z efektem rozpryskowym powyżej 20mm',
+    'Mocne petardy, wyrzutnie hukowe',
+    'Bardzo mocne petardy (rasowe emitery)'
+];
+const categoriesLinks = [
+    '/kategoria-1',
+    '/kategoria-2',
+    '/kategoria-3',
+    '/kategoria-4',
+    '/kategoria-5',
+    '/kategoria-6',
+    '/kategoria-7',
+    '/kategoria-8',
+    '/kategoria-9',
+    '/kategoria-10',
+    '/kategoria-11'
+];
+
+const lottieSoundAnimationElement = document.querySelector('.lottieSoundAnimation--desktop');
+const rangeSliderElement = document.querySelector('.dropdownMenuSound__slider__range--desktop');
+const soundLvlHeaderElement = document.querySelector('.dropdownMenuSound__right__header--desktop');
+const soundLvlDescriptionElement = document.querySelector('.dropdownMenuSound__right__text--desktop');
+
+let currentSoundLvl = 0;
+
+const lottieSoundAnimation = lottie.loadAnimation({
+    container: lottieSoundAnimationElement,
+    renderer: 'svg',
+    loop: false,
+    autoplay: false,
+    path: 'https://ftp.codergasm.com/arka-menu-glosnosc/assets/skala-glosnosci.json'
+});
+
+const getCurrentSoundLvl = (val) => {
+    return framesRanges.findIndex((item) => {
+        return val >= item[0] && val <= item[1];
+    });
+}
+
+let lvlDescriptionTimer;
+
+const changeLvlDescription = (currentValue, force = false) => {
+    const soundLvl = getCurrentSoundLvl(currentValue);
+
+    if(soundLvl !== currentSoundLvl || force) {
+        clearTimeout(lvlDescriptionTimer);
+        currentSoundLvl = soundLvl;
+
+        const translation = 'translateX(50px)';
+
+        soundLvlHeaderElement.style.transform = translation;
+        soundLvlDescriptionElement.style.transform = translation;
+
+        soundLvlHeaderElement.style.opacity = '0';
+        soundLvlDescriptionElement.style.opacity = '0';
+
+        lvlDescriptionTimer = setTimeout(() => {
+            soundLvlHeaderElement.textContent = soundLevelsTitles[soundLvl];
+            soundLvlDescriptionElement.textContent = soundLevelsDescriptions[soundLvl];
+
+            soundLvlHeaderElement.style.transform = 'none';
+            soundLvlDescriptionElement.style.transform = 'none';
+
+            soundLvlHeaderElement.style.opacity = '1';
+            soundLvlDescriptionElement.style.opacity = '1';
+        }, 410);
+    }
+}
+
+let isAnimating = false;
+
+rangeSliderElement.addEventListener('input', () => {
+    const currentValue = rangeSliderElement.value;
+
+    if(!isAnimating) {
+        isAnimating = true;
+        animateToFrame();
+    }
+
+    changeLvlDescription(currentValue);
+});
+
+function animateToFrame() {
+    const targetFrame = Math.floor((rangeSliderElement.value / 1000) * lottieSoundAnimation.totalFrames);
+    const currentFrame = lottieSoundAnimation.currentFrame;
+    const frameDiff = targetFrame - currentFrame;
+    const frameStep = frameDiff / 10; // 30 to liczba klatek na animację
+
+    if (Math.abs(frameDiff) <= 1) {
+        isAnimating = false;
+        return;
+    }
+
+    lottieSoundAnimation.goToAndStop(currentFrame + frameStep, true);
+    requestAnimationFrame(animateToFrame);
+}
+
+const changeSoundLvl = (force = false) => {
+    const rangeValue = ((framesRanges[currentSoundLvl][0] + framesRanges[currentSoundLvl][1]) / 2).toFixed();
+
+    rangeSliderElement.value = rangeValue;
+    changeLvlDescription(rangeValue, force);
+
+    if(!isAnimating) {
+        isAnimating = true;
+        animateToFrame();
+    }
+}
+
+const prevSoundLvl = () => {
+    currentSoundLvl = Math.max(currentSoundLvl-1, 0);
+    changeSoundLvl(true);
+}
+
+const nextSoundLvl = () => {
+    currentSoundLvl = Math.min(currentSoundLvl+1, 7);
+    changeSoundLvl(true);
+}
+
+const mobileAnimationButton = document.querySelector('.btn--dropdownMenuSound');
+let hoverTimer;
+
+mobileAnimationButton.addEventListener('mouseenter', () => {
+    hoverTimer = setTimeout(() => {
+        goToCategory();
+    }, 2000);
+});
+
+mobileAnimationButton.addEventListener('mouseleave', () => {
+    clearTimeout(hoverTimer);
+});
+
+const goToCategory = () => {
+    window.location.href = `https://ftp.codergasm.com/arka-menu-glosnosc${categoriesLinks[currentSoundLvl]}`;
+}
+
+const goToCategoryMobile = () => {
+    window.location.href = `https://ftp.codergasm.com/arka-menu-glosnosc${categoriesLinks[currentSoundLvlMobile]}`;
+}
+
+const checkFirstSoundMenuAnimation = () => {
+    const cookie = localStorage.getItem('arka-sound-menu');
+
+    if(cookie !== 'true') {
+        localStorage.setItem('arka-sound-menu', 'true');
+
+        const slider = rangeSliderElement;
+        const targetValue = 500;
+        const duration = 4000;
+        const steps = 1000;
+
+        const stepValue = targetValue / steps;
+        let currentValue = 0;
+        let stepCount = 0;
+
+        const stepsValues = framesRanges.map((item) => (parseInt(item[1]) + 1));
+
+        const interval = setInterval(() => {
+            currentValue += stepValue;
+            stepCount++;
+
+            slider.value = currentValue;
+
+            if(stepsValues.includes(currentValue)) {
+                changeLvlDescription(parseInt(slider.value), true);
+            }
+
+            animateToFrame();
+
+            if (stepCount >= steps) {
+                clearInterval(interval); // Zatrzymaj animację po osiągnięciu docelowej wartości
+            }
+        }, duration / steps);
+
+
+        setTimeout(() => {
+            rangeSliderElement.disabled = false;
+        }, 4000);
+    }
+    else {
+        rangeSliderElement.disabled = false;
+    }
+}
+
+/* Mobile */
+const lottieSoundAnimationElementMobile = document.querySelector('.lottieSoundAnimation--mobile');
+const rangeSliderElementMobile = document.querySelector('.dropdownMenuSound__slider__range--mobile');
+const soundLvlHeaderElementMobile = document.querySelector('.dropdownMenuSound__right__header--mobile');
+const soundLvlDescriptionElementMobile = document.querySelector('.dropdownMenuSound__right__text--mobile');
+
+const mobileAnimationButtonMobile = document.querySelector('.btn--dropdownMenuSound--mobile');
+const mobileAnimationButtonMobileText = document.querySelector('.btn--dropdownMenuSound--mobile>.text');
+let currentSoundLvlMobile = 0;
+
+const lottieSoundAnimationMobile = lottie.loadAnimation({
+    container: lottieSoundAnimationElementMobile,
+    renderer: 'svg',
+    loop: false,
+    autoplay: false,
+    path: 'https://ftp.codergasm.com/arka-menu-glosnosc/assets/skala-glosnosci.json'
+});
+
+const changeLvlDescriptionMobile = (currentValue, force = false) => {
+    const soundLvl = getCurrentSoundLvl(currentValue);
+
+    if(soundLvl !== currentSoundLvlMobile || force) {
+        currentSoundLvlMobile = soundLvl;
+
+        const translation = 'translateY(20px)';
+
+        soundLvlHeaderElementMobile.style.transform = translation;
+        soundLvlDescriptionElementMobile.style.transform = translation;
+
+        soundLvlHeaderElementMobile.style.opacity = '0';
+        soundLvlDescriptionElementMobile.style.opacity = '0';
+
+        setTimeout(() => {
+            soundLvlHeaderElementMobile.textContent = soundLevelsTitles[soundLvl];
+            soundLvlDescriptionElementMobile.textContent = soundLevelsDescriptions[soundLvl];
+
+            soundLvlHeaderElementMobile.style.transform = 'none';
+            soundLvlDescriptionElementMobile.style.transform = 'none';
+
+            soundLvlHeaderElementMobile.style.opacity = '1';
+            soundLvlDescriptionElementMobile.style.opacity = '1';
+        }, 410);
+    }
+}
+
+let dragMobileSliderTime;
+let animationTime;
+
+rangeSliderElementMobile.addEventListener('input', () => {
+    clearTimeout(dragMobileSliderTime);
+    clearTimeout(animationTime);
+
+    mobileAnimationButtonMobile.style.backgroundPosition = 'right bottom';
+    mobileAnimationButtonMobile.style.transition = 'all 2s ease-out';
+
+    animationTime = setTimeout(() => {
+        mobileAnimationButtonMobileText.style.color = '#fff';
+        mobileAnimationButtonMobile.style.backgroundPosition = 'left bottom';
+    }, 500);
+
+    dragMobileSliderTime = setTimeout(() => {
+        goToCategoryMobile();
+    }, 2000);
+});
+
+rangeSliderElementMobile.addEventListener('touchend', () => {
+    clearTimeout(dragMobileSliderTime);
+    clearTimeout(animationTime);
+
+    mobileAnimationButtonMobileText.style.color = '#000';
+    mobileAnimationButtonMobile.style.backgroundPosition = 'right bottom';
+});
+
+rangeSliderElementMobile.addEventListener('change', () => {
+    clearTimeout(dragMobileSliderTime);
+    clearTimeout(animationTime);
+
+    mobileAnimationButtonMobileText.style.color = '#000';
+    mobileAnimationButtonMobile.style.backgroundPosition = 'right bottom';
+});
+
+rangeSliderElementMobile.addEventListener('input', () => {
+    const currentValue = rangeSliderElementMobile.value;
+
+    if(!isAnimating) {
+        isAnimating = true;
+        animateToFrameMobile();
+    }
+
+    changeLvlDescriptionMobile(currentValue);
+});
+
+function animateToFrameMobile() {
+    const targetFrame = Math.floor((rangeSliderElementMobile.value / 1000) * lottieSoundAnimationMobile.totalFrames);
+    const currentFrame = lottieSoundAnimationMobile.currentFrame;
+    const frameDiff = targetFrame - currentFrame;
+    const frameStep = frameDiff / 10;
+
+    if (Math.abs(frameDiff) <= 1) {
+        isAnimating = false;
+        return;
+    }
+
+    lottieSoundAnimationMobile.goToAndStop(currentFrame + frameStep, true);
+    requestAnimationFrame(animateToFrameMobile);
+}
+
+const changeSoundLvlMobile = (force = false) => {
+    const rangeValue = ((framesRanges[currentSoundLvlMobile][0] + framesRanges[currentSoundLvlMobile][1]) / 2).toFixed();
+
+    rangeSliderElementMobile.value = rangeValue;
+    changeLvlDescriptionMobile(rangeValue, force);
+
+    if(!isAnimating) {
+        isAnimating = true;
+        animateToFrameMobile();
+    }
+}
+
+const prevSoundLvlMobile = () => {
+    currentSoundLvlMobile = Math.max(currentSoundLvlMobile-1, 0);
+    changeSoundLvlMobile(true);
+}
+
+const nextSoundLvlMobile = () => {
+    currentSoundLvlMobile = Math.min(currentSoundLvlMobile+1, 7);
+    changeSoundLvlMobile(true);
+}
+
+const checkFirstSoundMenuAnimationMobile = () => {
+    const cookie = localStorage.getItem('arka-sound-menu');
+
+    if(cookie !== 'true') {
+        localStorage.setItem('arka-sound-menu', 'true');
+
+        const slider = rangeSliderElementMobile;
+        const targetValue = 500;
+        const duration = 4000;
+        const steps = 1000;
+
+        const stepValue = targetValue / steps;
+        let currentValue = 0;
+        let stepCount = 0;
+
+        const stepsValues = framesRanges.map((item) => (parseInt(item[1]) + 1));
+
+        const interval = setInterval(() => {
+            currentValue += stepValue;
+            stepCount++;
+
+            slider.value = currentValue;
+
+            if(stepsValues.includes(currentValue)) {
+                changeLvlDescriptionMobile(parseInt(slider.value), true);
+            }
+
+            animateToFrameMobile();
+
+            if (stepCount >= steps) {
+                clearInterval(interval);
+            }
+        }, duration / steps);
+
+
+        setTimeout(() => {
+            rangeSliderElementMobile.disabled = false;
+        }, 4000);
+    }
+    else {
+        rangeSliderElementMobile.disabled = false;
+    }
 }

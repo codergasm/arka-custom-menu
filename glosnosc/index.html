@@ -4,17 +4,61 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/2.3.3/rangeslider.min.css" integrity="sha512-Rp0yZ3NMh1xOUZ4VHYggmX4pq4ZJdpcOETH03qBD5qNDsqTBw1MzUnX0T5PcTJmr2mNTOmtbxsHaGwzjylNpHA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 <div class="container">
-<button class="btn btn--menu btn--menu--events">
-    Fajerwerki wg okazji
+<button class="btn btn--menu btn--menu--sound" onmouseenter="checkFirstSoundMenuAnimation()">
+    Fajerwerki wg glosnosci
 </button>
-<button class="btn btn--menu btn--menu--types">
-    Fajerwerki wg rodzaju
-</button>
+    <!-- Wg glosnosci -->
+    <div class="dropdownMenu dropdownMenu--sound">
+        <div class="dropdownMenuSound__left">
+            <div class="lottieSoundAnimation lottieSoundAnimation--desktop">
+                <!-- Place for lottie appended in javascript -->
+            </div>
+
+            <div class="dropdownMenuSound__slider">
+                <input class="dropdownMenuSound__slider__range dropdownMenuSound__slider__range--desktop"
+                       disabled
+                       type="range"
+                       min="0"
+                       max="1000"
+                       step="1"
+                       value="0" />
+
+                <div class="dropdownMenuSound__slider__bottom">
+                    <button class="btn btn--prev btn--prev--sound" onclick="prevSoundLvl()">
+                        <img class="img" src="./assets/arrow.svg" alt="arrow" />
+                    </button>
+                    <div class="btnOuter">
+                        <div class="btn--dropdownMenuSound btn--dropdownMenuSound--desktop" onclick="goToCategory()">
+                            <div class="text">
+                                Przejdź
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn--next btn--next--sound" onclick="nextSoundLvl()">
+                        <img class="img" src="./assets/arrow.svg" alt="arrow" />
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="dropdownMenuSound__right">
+            <h4 class="dropdownMenuSound__right__header dropdownMenuSound__right__header--desktop">
+                Bezdźwięczne
+            </h4>
+            <p class="dropdownMenuSound__right__text dropdownMenuSound__right__text--desktop">
+                Palący się papier
+            </p>
+        </div>
+    </div>
+
+
+    <!-- Wg okazji -->
 <!-- DESKTOP -->
 <div class="dropdownMenu dropdownMenu--events">
     <div class="dropdownMenu__banners">
@@ -435,6 +479,14 @@
                 </span>
                 <img class="mobileMenu__item__icon" src="https://ftp.codergasm.com/arka-custom-menu/assets/arrow.svg" alt="arrow" />
             </button>
+            <button class="mobileMenu__item"
+                    onclick="goToMobileMenuSlide(3)">
+                <span>
+                    <img class="mobileMenu__item__leftIcon" src="https://ftp.codergasm.com/arka-custom-menu/assets/fireworks.svg" alt="fajerwerki" />
+                    Fajerwerki wg głośności
+                </span>
+                <img class="mobileMenu__item__icon" src="https://ftp.codergasm.com/arka-custom-menu/assets/arrow.svg" alt="arrow" />
+            </button>
             <a class="mobileMenu__item" href="#">
                 <span>
                     <img class="mobileMenu__item__leftIcon" src="https://ftp.codergasm.com/arka-custom-menu/assets/fireworks.svg" alt="fajerwerki" />
@@ -838,11 +890,65 @@
             </div>
         </div>
     </div>
+
+    <!-- Subcategories 3 -->
+    <div class="mobileMenu__slide mobileMenu__slide--4">
+        <div class="mobileMenu__subcategoriesHeader" onclick="goToMobileMenuSlide(0)">
+            <img class="mobileMenu__item__icon" src="https://ftp.codergasm.com/arka-custom-menu/assets/arrow.svg" alt="arrow" />
+            Fajerwerki wg głośności
+        </div>
+
+        <div class="mobileMenu__subcategories mobileMenu__subcategories--sound">
+            <div class="dropdownMenuSound__left">
+                <h4 class="dropdownMenuSound__right__header dropdownMenuSound__right__header--mobile">
+                    Bezdźwięczne
+                </h4>
+                <p class="dropdownMenuSound__right__text dropdownMenuSound__right__text--mobile">
+                    Palący się papier
+                </p>
+
+                <div class="lottieSoundAnimation lottieSoundAnimation--mobile">
+                    <!-- Place for lottie appended in javascript -->
+                </div>
+            </div>
+
+            <div class="dropdownMenuSound__slider">
+                <div class="dropdownMenuSound__slider__bottom">
+                    <button class="btn btn--prev btn--prev--sound" onclick="prevSoundLvlMobile()">
+                        <img class="img" src="./assets/arrow.svg" alt="arrow" />
+                    </button>
+                    <div class="btnOuter">
+                        <div class="btn--dropdownMenuSound btn--dropdownMenuSound--mobile" onclick="goToCategoryMobile()">
+                            <div class="text">
+                                Przejdź
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn--next btn--next--sound" onclick="nextSoundLvlMobile()">
+                        <img class="img" src="./assets/arrow.svg" alt="arrow" />
+                    </button>
+                </div>
+
+                <label>
+                    <input class="dropdownMenuSound__slider__range dropdownMenuSound__slider__range--mobile"
+                           disabled
+                           type="range"
+                           min="0"
+                           max="1000"
+                           step="1"
+                           value="0" />
+                </label>
+            </div>
+        </div>
+    </div>
 </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js" integrity="sha512-jEnuDt6jfecCjthQAJ+ed0MTVA++5ZKmlUcmDGBv2vUI/REn6FuIdixLNnQT+vKusE2hhTk2is3cFvv5wA+Sgg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.com/libraries/bodymovin" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/2.0.0/rangeslider.js" integrity="sha512-nNk6WlQNxdoGe0WKkh2lL6BssgsB6xa0NcP5tAjJiMFqRyxDZO7UuMXLlU2SqZ+mjG5fYomolQO1iir97pETnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="main.js"></script>
 </body>
 </html>
