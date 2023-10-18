@@ -18,6 +18,19 @@
         <div class="dropdownMenuSound__left">
             <div class="lottieSoundAnimation lottieSoundAnimation--desktop">
                 <!-- Place for lottie appended in javascript -->
+
+                <!-- Elements for hover -->
+                <div class="lottieSoundAnimation__hoverElement lottieSoundAnimation__hoverElement--0" onmouseenter="goToSoundLvl(0)"></div>
+                <div class="lottieSoundAnimation__hoverElement lottieSoundAnimation__hoverElement--1" onmouseenter="goToSoundLvl(1)"></div>
+                <div class="lottieSoundAnimation__hoverElement lottieSoundAnimation__hoverElement--2" onmouseenter="goToSoundLvl(2)"></div>
+                <div class="lottieSoundAnimation__hoverElement lottieSoundAnimation__hoverElement--3" onmouseenter="goToSoundLvl(3)"></div>
+                <div class="lottieSoundAnimation__hoverElement lottieSoundAnimation__hoverElement--4" onmouseenter="goToSoundLvl(4)"></div>
+                <div class="lottieSoundAnimation__hoverElement lottieSoundAnimation__hoverElement--5" onmouseenter="goToSoundLvl(5)"></div>
+                <div class="lottieSoundAnimation__hoverElement lottieSoundAnimation__hoverElement--6" onmouseenter="goToSoundLvl(6)"></div>
+                <div class="lottieSoundAnimation__hoverElement lottieSoundAnimation__hoverElement--7" onmouseenter="goToSoundLvl(7)"></div>
+                <div class="lottieSoundAnimation__hoverElement lottieSoundAnimation__hoverElement--8" onmouseenter="goToSoundLvl(8)"></div>
+                <div class="lottieSoundAnimation__hoverElement lottieSoundAnimation__hoverElement--9" onmouseenter="goToSoundLvl(9)"></div>
+                <div class="lottieSoundAnimation__hoverElement lottieSoundAnimation__hoverElement--10" onmouseenter="goToSoundLvl(10)"></div>
             </div>
 
             <div class="dropdownMenuSound__slider">
@@ -54,6 +67,24 @@
             <p class="dropdownMenuSound__right__text dropdownMenuSound__right__text--desktop">
                 Palący się papier
             </p>
+
+            <div class="dropdownMenuSound__settings">
+                <span class="switch--customMenu__text">
+                    Pokaż tylko produkty tego poziomu
+                </span>
+
+                <label class="switch--customMenu">
+                    <input class="input--customMenu"
+                           onchange="changeShowProductsMode(event)"
+                           checked
+                           type="checkbox">
+                    <span class="slider--customMenu round--customMenu"></span>
+                </label>
+
+                <span class="switch--customMenu__text">
+                        Pokaż produkty tego poziomu oraz cichsze
+                    </span>
+            </div>
         </div>
     </div>
 
@@ -909,6 +940,24 @@
 
                 <div class="lottieSoundAnimation lottieSoundAnimation--mobile">
                     <!-- Place for lottie appended in javascript -->
+                </div>
+
+                <div class="dropdownMenuSound__settings">
+                    <span class="switch--customMenu__text">
+                        Pokaż tylko produkty tego poziomu
+                    </span>
+
+                    <label class="switch--customMenu">
+                        <input class="input--customMenu"
+                               onchange="changeShowProductsMode(event)"
+                               checked
+                               type="checkbox">
+                        <span class="slider--customMenu round--customMenu"></span>
+                    </label>
+
+                    <span class="switch--customMenu__text">
+                        Pokaż produkty tego poziomu oraz cichsze
+                    </span>
                 </div>
             </div>
 

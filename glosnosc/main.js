@@ -835,6 +835,8 @@ const changeLvlDescription = (currentValue, force = false) => {
 }
 
 let isAnimating = false;
+let prevValueSoundLvl = -1;
+let showAlsoLowerLvlProducts = true;
 
 rangeSliderElement.addEventListener('input', () => {
     const currentValue = rangeSliderElement.value;
@@ -845,6 +847,46 @@ rangeSliderElement.addEventListener('input', () => {
     }
 
     changeLvlDescription(currentValue);
+
+    if(currentSoundLvl !== prevValueSoundLvl) {
+        prevValueSoundLvl = currentSoundLvl;
+
+        clearTimeout(dragMobileSliderTime);
+        clearTimeout(animationTime);
+
+        dragMobileSliderTime = setTimeout(() => {
+            goToCategory();
+        }, 4000);
+
+        mobileAnimationButton.style.transition = 'all .7s ease-out';
+        mobileAnimationButton.style.backgroundPosition = 'right bottom';
+        mobileAnimationButtonText.style.color = '#000';
+
+        setTimeout(() => {
+            mobileAnimationButton.style.transition = 'all 4s ease-out';
+        }, 200);
+
+        animationTime = setTimeout(() => {
+            mobileAnimationButtonText.style.color = '#fff';
+            mobileAnimationButton.style.backgroundPosition = 'left bottom';
+        }, 500);
+    }
+});
+
+rangeSliderElement.addEventListener('focusout', () => {
+    clearTimeout(dragMobileSliderTime);
+    clearTimeout(animationTime);
+
+    mobileAnimationButtonText.style.color = '#000';
+    mobileAnimationButton.style.backgroundPosition = 'right bottom';
+});
+
+rangeSliderElement.addEventListener('change', () => {
+    clearTimeout(dragMobileSliderTime);
+    clearTimeout(animationTime);
+
+    mobileAnimationButtonText.style.color = '#000';
+    mobileAnimationButton.style.backgroundPosition = 'right bottom';
 });
 
 function animateToFrame() {
@@ -874,6 +916,11 @@ const changeSoundLvl = (force = false) => {
     }
 }
 
+const goToSoundLvl = (n) => {
+    currentSoundLvl = n;
+    changeSoundLvl(true);
+}
+
 const prevSoundLvl = () => {
     currentSoundLvl = Math.max(currentSoundLvl-1, 0);
     changeSoundLvl(true);
@@ -885,12 +932,13 @@ const nextSoundLvl = () => {
 }
 
 const mobileAnimationButton = document.querySelector('.btn--dropdownMenuSound');
+const mobileAnimationButtonText = document.querySelector('.btn--dropdownMenuSound>.text');
 let hoverTimer;
 
 mobileAnimationButton.addEventListener('mouseenter', () => {
     hoverTimer = setTimeout(() => {
         goToCategory();
-    }, 2000);
+    }, 4000);
 });
 
 mobileAnimationButton.addEventListener('mouseleave', () => {
@@ -949,6 +997,10 @@ const checkFirstSoundMenuAnimation = () => {
     }
 }
 
+const changeShowProductsMode = (e) => {
+    showAlsoLowerLvlProducts = e.target.checked;
+}
+
 /* Mobile */
 const lottieSoundAnimationElementMobile = document.querySelector('.lottieSoundAnimation--mobile');
 const rangeSliderElementMobile = document.querySelector('.dropdownMenuSound__slider__range--mobile');
@@ -995,23 +1047,42 @@ const changeLvlDescriptionMobile = (currentValue, force = false) => {
 }
 
 let dragMobileSliderTime;
+let prevValueSoundLvlMobile = -1;
 let animationTime;
 
 rangeSliderElementMobile.addEventListener('input', () => {
-    clearTimeout(dragMobileSliderTime);
-    clearTimeout(animationTime);
+    const currentValue = rangeSliderElementMobile.value;
 
-    mobileAnimationButtonMobile.style.backgroundPosition = 'right bottom';
-    mobileAnimationButtonMobile.style.transition = 'all 2s ease-out';
+    if(!isAnimating) {
+        isAnimating = true;
+        animateToFrameMobile();
+    }
 
-    animationTime = setTimeout(() => {
-        mobileAnimationButtonMobileText.style.color = '#fff';
-        mobileAnimationButtonMobile.style.backgroundPosition = 'left bottom';
-    }, 500);
+    changeLvlDescriptionMobile(currentValue);
 
-    dragMobileSliderTime = setTimeout(() => {
-        goToCategoryMobile();
-    }, 2000);
+    if(currentSoundLvlMobile !== prevValueSoundLvlMobile) {
+        prevValueSoundLvlMobile = currentSoundLvlMobile;
+
+        clearTimeout(dragMobileSliderTime);
+        clearTimeout(animationTime);
+
+        dragMobileSliderTime = setTimeout(() => {
+            goToCategoryMobile();
+        }, 4100);
+
+        mobileAnimationButtonMobile.style.transition = 'all .7s ease-out';
+        mobileAnimationButtonMobile.style.backgroundPosition = 'right bottom';
+        mobileAnimationButtonMobileText.style.color = '#000';
+
+        setTimeout(() => {
+            mobileAnimationButtonMobile.style.transition = 'all 4s ease-out';
+        }, 200);
+
+        animationTime = setTimeout(() => {
+            mobileAnimationButtonMobileText.style.color = '#fff';
+            mobileAnimationButtonMobile.style.backgroundPosition = 'left bottom';
+        }, 500);
+    }
 });
 
 rangeSliderElementMobile.addEventListener('touchend', () => {
@@ -1028,17 +1099,6 @@ rangeSliderElementMobile.addEventListener('change', () => {
 
     mobileAnimationButtonMobileText.style.color = '#000';
     mobileAnimationButtonMobile.style.backgroundPosition = 'right bottom';
-});
-
-rangeSliderElementMobile.addEventListener('input', () => {
-    const currentValue = rangeSliderElementMobile.value;
-
-    if(!isAnimating) {
-        isAnimating = true;
-        animateToFrameMobile();
-    }
-
-    changeLvlDescriptionMobile(currentValue);
 });
 
 function animateToFrameMobile() {
